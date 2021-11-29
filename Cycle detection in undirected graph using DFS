@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+bool check(int i,int parent,vector<int> adj[],vector<int> &vis)
+{
+    vis[i]=1;
+    for(int node:adj[i])
+    {
+          if(!vis[node])
+          {
+              if(check(node,i,adj,vis)) return true;
+          }
+          else if(node!=parent)
+               return true;
+    }
+    return false;
+    
+}
+bool iscyclye(vector<int> adj[],int n)
+{
+    vector<int> vis(n+1,0);
+    for(int i=1;i<=n;i++)
+    {
+        if(!vis[i])
+           if(check(i,-1,adj,vis))
+               return true;
+    }
+    return false;
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    vector<int> adj[n+1];
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    cout<<iscyclye(adj,n);
+    return 0;
+}
