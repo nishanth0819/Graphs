@@ -1,0 +1,51 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+bool color(int i,vector<int> adj[],vector<int> &col)
+{
+    if(col[i]==-1)
+       col[i]=1;
+     for(auto it:adj[i])
+     {
+         if(col[it]==-1)
+         {
+            col[it]=1-col[i];
+            if(!color(it,adj,col))
+               return false;
+         }
+         else if(col[it]==col[i])
+             return false;
+    }
+    return true;
+}
+bool checkbiparte(vector<int> adj[],int n)
+{
+    vector<int> col(n+1,-1);
+    for(int i=1;i<=n;i++)
+    {
+        if(col[i]==-1)
+        {
+           if(!color(i,adj,col))
+           {
+               return false;
+           }
+        }
+    }
+    return true;
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    vector<int> adj[n+1];
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    cout<<checkbiparte(adj,n);
+    return 0;
+}
