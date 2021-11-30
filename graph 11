@@ -1,0 +1,47 @@
+#include <iostream>
+#include<vector>
+#include<stack>
+using namespace std;
+void dfs(int node,vector<int> adj[],vector<int> &vis,stack<int> &st)
+{
+    vis[node]=1;
+    for(int it: adj[node])
+    {
+        if(!vis[it])
+           dfs(it,adj,vis,st);
+    }
+    st.push(node);
+}
+void find(vector<int> adj[],int n)
+{
+    vector<int> vis(n,0);
+    stack<int> st;
+    for(int i=0;i<n;i++)
+    {
+        if(!vis[i])
+           dfs(i,adj,vis,st);
+    }
+    vector<int> topo;
+   while(st.empty()==false)
+   {
+       topo.push_back(st.top());
+       st.pop();
+   }
+   for(int i=0;i<topo.size();i++)
+   {
+       cout<<topo[i]<<" ";
+   }
+}
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    vector<int> adj[m+1];
+    for(int i=0;i<n;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+    }
+    find(adj,m);
+}
