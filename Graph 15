@@ -1,0 +1,58 @@
+#include<iostream>
+#include<climits>
+#include<queue>
+#include<stack>
+using namespace std;
+void topo(int i,vector<pair<int,int>> adj[],stack<int> &s,vector<int> &vis)
+{
+    vis[i]=1;
+    for(auto node:adj[i])
+    {
+        if(!vis[node.first])
+        {
+            topo(node.first,adj,s,vis);
+        }
+    }
+    s.push(i);
+}
+void find(vector<pair<int,int>> adj[],int n,int src)
+{
+    vector<int> vis(n,0);
+    stack<int> s;
+    for(int i=0;i<n;i++)
+    {
+        if(!vis[i])
+           topo(i,adj,s,vis);
+    }
+    vector<int> dis(n,INT_MAX);
+    dis[src]=0;
+    while(s.empty()==false)
+    {
+        int node=s.top();
+        s.pop();
+        for(auto it:adj[node])
+        {
+            if(dis[node]+it.second<dis[it.first])
+            {
+                dis[it.first]=dis[node]+it.second;
+            }
+        }
+    }
+    for(int i=0;i<dis.size();i++)
+    {
+        cout<<dis[i]<<" ";
+    }
+}
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    vector<pair<int,int>> adj[m];
+    for(int i=0;i<n;i++)
+    {
+        int u,v,wt;
+        cin>>u>>v>>wt;
+        adj[u].push_back({v,wt});
+    }
+    find(adj,m,0);
+}
