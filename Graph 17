@@ -1,0 +1,72 @@
+#include <iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+void prims(vector<pair<int,int>> adj[],int n)
+{
+    int par[n],mst[n],key[n];
+    for(int i=0;i<n;i++)
+    {
+        par[i]=-1;
+        mst[i]=false;
+        key[i]=INT_MAX;
+    }
+    key[0]=0;
+    for(int i=0;i<n-1;i++)
+    {
+        int min=INT_MAX,near;
+        for(int j=0;j<n;j++)
+        {
+            if(mst[j]==false && key[j]<min)
+            {
+                min=key[j];
+                near=j;
+            }
+            
+        }
+        mst[near]=true;
+        for(auto node:adj[near])
+        {
+            int vertex=node.first;
+            int wt=node.second;
+            if(mst[vertex]==false && wt<key[vertex])
+            {
+                key[vertex]=wt;
+                par[vertex]=near;
+            }
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        cout<<par[i]<<" ";
+    }
+    int sum=0;
+    for(int i=1;i<n;i++)
+    {
+        for(auto node:adj[i])
+        {
+            int first=node.first;
+            int wt=node.second;
+            if(first==par[i])
+            {
+                sum=sum+wt;
+            }
+        }
+    }
+    cout<<endl;
+    cout<<sum;
+}
+int main()
+{
+    int m,n;
+    cin>>m>>n;
+    vector<pair<int,int>> adj[m];
+    for(int i=0;i<n;i++)
+    {
+        int u,v,wt;
+        cin>>u>>v>>wt;
+        adj[u].push_back({v,wt});
+        adj[v].push_back({u,wt});
+    }
+    prims(adj,m);
+}
